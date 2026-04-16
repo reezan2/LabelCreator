@@ -1,0 +1,1 @@
+Placez ici les logos PNG nommés comme la valeur de la colonne Brand.
