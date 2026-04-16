@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur d'étiquettes Ventilairsec</title>
+  <meta name="description" content="Générateur d'étiquettes Ventilairsec compatible GitHub Pages" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero__content">
+        <div class="eyebrow">Ventilairsec · GitHub Pages edition</div>
+        <h1>Générateur d'étiquettes</h1>
+        <p>
+          Version web stable pour GitHub Pages. Charge ton fichier Excel,
+          sélectionne les langues, choisis le format d'étiquette, puis génère un PDF
+          ou un ZIP de PDF.
+        </p>
+        <div class="hero__badges">
+          <span>GitHub compatible</span>
+          <span>Petit 40 × 100</span>
+          <span>Grand A6</span>
+          <span>FR · EN · ES · IT · PT</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <h2>Configuration</h2>
+        <p class="muted">Le choix du fichier et de la feuille produit est regroupé sur la même ligne.</p>
+
+        <div class="row row--file">
+          <div class="field">
+            <label for="excelFile">1) Fichier Excel (.xlsx)</label>
+            <input type="file" id="excelFile" accept=".xlsx,.xls" />
+          </div>
+          <div class="field">
+            <label for="sheetSelect">Feuille produit</label>
+            <select id="sheetSelect"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="labelFormat">2) Format de l'étiquette</label>
+            <select id="labelFormat">
+              <option value="small">Petit (40 × 100 mm)</option>
+              <option value="large">Grand (105 × 148 mm - A6)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>3) Langues de désignation</label>
+          <div class="lang-grid">
+            <label class="lang-pill"><input type="checkbox" id="langFR" checked> FR</label>
+            <label class="lang-pill"><input type="checkbox" id="langEN"> EN</label>
+            <label class="lang-pill"><input type="checkbox" id="langES"> ES</label>
+            <label class="lang-pill"><input type="checkbox" id="langIT"> IT</label>
+            <label class="lang-pill"><input type="checkbox" id="langPT"> PT</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Options</label>
+          <div class="option-grid">
+            <label><input type="checkbox" id="showSku" checked> SKU</label>
+            <label><input type="checkbox" id="showDesignation" checked> Désignation</label>
+            <label><input type="checkbox" id="showGencode" checked> Gencode</label>
+            <label><input type="checkbox" id="showBarcode" checked> Code-barres</label>
+            <label><input type="checkbox" id="exportBW"> Exporter le PDF en noir et blanc</label>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="previewBtn" type="button">Prévisualiser la 1re étiquette</button>
+          <button id="generateBtn" type="button">Générer le PDF</button>
+          <button id="generateZipBtn" type="button" class="button--secondary">Générer un ZIP avec un PDF par étiquette</button>
+        </div>
+
+        <div id="status" class="status">En attente d'un fichier Excel.</div>
+        <div id="downloads" class="downloads"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Aperçu</h2>
+        <p class="muted">
+          Les logos sont chargés automatiquement depuis le dossier <strong>assets</strong>.
+          Exemple : <strong>assets/VMI.png</strong>
+        </p>
+        <div id="preview" class="preview"></div>
+      </section>
+    </main>
+
+    <section class="info-grid">
+      <div class="panel">
+        <h2>Données détectées</h2>
+        <p class="muted">Le mapping s'adapte à ton fichier Excel actuel.</p>
+        <div id="tablebox" class="tablebox"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Structure Excel recommandée</h2>
+        <div class="help-text">
+          <p><strong>Feuille 1 - Produits</strong><br>
+          <code>Label Format</code>, <code>Brand</code>, <code>SKU</code>, <code>Product</code>,
+          <code>Gencode - number</code>, <code>Designation FR</code>, <code>Designation EN</code>,
+          <code>Designation ES</code>, <code>Designation IT</code>, <code>Designation PT</code></p>
+
+          <p><strong>Feuille 2 - Contenu</strong><br>
+          <code>Parent SKU</code>, <code>SKU</code>, <code>Designation</code>, <code>Quantity</code></p>
+
+          <p>Le lien se fait avec <strong>Parent SKU = SKU du produit principal</strong>.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
